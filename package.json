@@ -1,6 +1,16 @@
 {
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx ts-node src/index.ts",
+    "dev": "nodemon src/index.ts"
+  },
   "devDependencies": {
+    "@types/koa": "^2.14.0",
+    "@types/koa-router": "^7.4.8",
     "@types/node": "^20.11.8",
+    "koa": "^2.15.0",
+    "koa-router": "^12.0.1",
+    "nodemon": "^3.0.3",
     "prisma": "^5.8.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
