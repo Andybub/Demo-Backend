@@ -10,28 +10,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
+model ShippingDetail {
+  id                Int       @id @default(autoincrement())
+  sno               String    @unique
+  trackingStatus    String
+  // estimatedDelivery DateTime
+  // recipientId       Int
+  // currentLocationId Int
+  // createdAt         DateTime  @default(now())
+  // updatedAt         DateTime  @updatedAt
+  // details           Detail[]
+  // recipient         Recipient @relation(fields: [recipientId], references: [id])
+  // currentLocation   Location  @relation(fields: [currentLocationId], references: [id])
 }
 
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
-}
+// model Detail {
+//   id                Int            @id @default(autoincrement())
+//   shippingId        Int
+//   date              DateTime
+//   time              String
+//   status            String
+//   locationId        Int
+//   createdAt         DateTime       @default(now())
+//   updatedAt         DateTime       @updatedAt
+//   location          Location       @relation(fields: [locationId], references: [id])
+//   ShippingDetail    ShippingDetail @relation(fields: [shippingId], references: [id])
+// }
 
-model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   Post[]
-  profile Profile?
-}
+// model Recipient {
+//   id              Int              @id @default(autoincrement())
+//   name            String
+//   address         String
+//   phone           String
+//   createdAt       DateTime         @default(now())
+//   updatedAt       DateTime         @updatedAt
+//   ShippingDetail  ShippingDetail[]
+// }
+
+// model Location {
+//   id             Int              @id @default(autoincrement())
+//   title          String
+//   city           String
+//   address        String
+//   createdAt      DateTime         @default(now())
+//   updatedAt      DateTime         @updatedAt
+//   details        Detail[]
+//   ShippingDetail ShippingDetail[]
+// }
