@@ -1,11 +1,17 @@
 import { PrismaClient } from '@prisma/client';
 import Router from "koa-router";
+import { Redis } from 'ioredis';
 
 const trackingStatus = ["Created", "Package Received", "In Transit", "Out for Delivery", "Delivery Attempted", "Delivered", "Returned to Sender", "Exception"];
 
 export const router = new Router();
 
 const prisma = new PrismaClient();
+
+const redis = new Redis({
+    port: 6379, // redis服务器默认端口号
+    host: '127.0.0.1' // redis服务器的IP地址
+})
 
 router.get('/fake', async (ctx) => {
     const { num } = ctx.query;
@@ -50,30 +56,43 @@ router.get('/fake', async (ctx) => {
 router.get("/query", async (ctx, next) => {
     const { sno } = ctx.query;
 
-    async function main() {
-      // ... you will write your Prisma Client queries here
-      const result = await prisma.shippingDetail.findUnique({
-        where: { sno: sno as string },
-      });
-      return result;
-    }
+    let cacheResult = await redis.get(sno as string);
 
-    const result = await main()
-      .then((result) => result)
-      .catch((e) => {
-          console.error(e)
-          process.exit(1)
-      })
-      .finally(async () => {
-          await prisma.$disconnect()
-      });
+    if (cacheResult) {
+        console.log("Cache hit");
 
-    if (result) {
-        ctx.body = result;
+        ctx.body = JSON.parse(cacheResult);
+        return;
     } else {
-        ctx.body = "No data found";
-        ctx.status = 404;
+        console.log("Cache miss");
+
+        async function main() {
+          // ... you will write your Prisma Client queries here
+          const result = await prisma.shippingDetail.findUnique({
+            where: { sno: sno as string },
+          });
+          return result;
+        }
+    
+        const result = await main()
+          .then((result) => result)
+          .catch((e) => {
+              console.error(e)
+              process.exit(1)
+          })
+          .finally(async () => {
+              await prisma.$disconnect()
+          });
+    
+        if (result) {
+            await redis.set(sno as string, JSON.stringify(result));
+            ctx.body = result;
+        } else {
+            ctx.body = "No data found";
+            ctx.status = 404;
+        }
     }
+
 });
 
 router.get("/", (ctx, next) => {
