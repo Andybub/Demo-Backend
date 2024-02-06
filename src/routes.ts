@@ -56,7 +56,8 @@ router.get('/fake', async (ctx) => {
 router.get("/query", async (ctx, next) => {
     const { sno } = ctx.query;
 
-    let cacheResult = await redis.get(sno as string);
+    console.log(await redis.ttl(String(sno)));
+    let cacheResult = await redis.get(String(sno));
 
     if (cacheResult) {
         console.log("Cache hit");
@@ -69,7 +70,7 @@ router.get("/query", async (ctx, next) => {
         async function main() {
           // ... you will write your Prisma Client queries here
           const result = await prisma.shippingDetail.findUnique({
-            where: { sno: sno as string },
+            where: { sno: String(sno) },
           });
           return result;
         }
@@ -85,7 +86,7 @@ router.get("/query", async (ctx, next) => {
           });
     
         if (result) {
-            await redis.set(sno as string, JSON.stringify(result));
+            await redis.set(String(sno), JSON.stringify(result), 'EX', 3600);
             ctx.body = result;
         } else {
             ctx.body = "No data found";
