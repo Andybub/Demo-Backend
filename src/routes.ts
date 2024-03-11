@@ -97,6 +97,10 @@ router.get("/query", async (ctx, next) => {
 
 });
 
+router.get("/test", (ctx, next) => {
+    ctx.body = "Text Content!";
+});
+
 router.get("/", (ctx, next) => {
     ctx.body = "Hello World!";
 });
