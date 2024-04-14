@@ -1,24 +1,26 @@
 # Based on LTS version of Node.js
 FROM node:20.12.0
 
-# Install the necessary packages
-RUN apt update && apt upgrade -y
-
 # 指定container預設的工作目錄
 WORKDIR /opt/node-server
 
-# 複製server相關程式碼到container中
-COPY . /opt/node-server
+# 複製server相關程式碼到container中 
+# 第一個 .：這個Dockerfile在專案內存在的位置
+# 第二個 .：想複製到哪的目標位置，可給定路徑/opt/node-server，或由WORKDIR指令後，直接給予.代表Docker container內的目前位置
+# COPY . /opt/node-server
+COPY . .
 
-RUN echo "DATABASE_URL=mysql://root:mypassword@db:3306/xxx?connect_timeout=300" > .env
+RUN echo "DATABASE_URL=mysql://root:mypassword@s_db:3306/fake_db_name" > .env
 RUN npm install
-RUN npx prisma db push
+
+COPY ./entrypoint.sh /
+RUN chmod +x /entrypoint.sh
 
 # Expose the port
 EXPOSE 3000
 
-# Start the server
-CMD ["npm", "run", "dev"]
+# Commands triggered when container is up
+CMD ["/entrypoint.sh"]
 
 # Build the image
 # docker build . -f node-base.dockerfile -t node-server

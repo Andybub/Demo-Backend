@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 
 const redis = new Redis({
     port: 6379, // redis服务器默认端口号
-    host: '127.0.0.1' // redis服务器的IP地址
+    host: 's_redis' // redis服务器的IP地址
 })
 
 router.get('/fake', async (ctx) => {
