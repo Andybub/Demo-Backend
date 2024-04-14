@@ -3,7 +3,10 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const trackingStatusSummaryReport = cron.schedule('* 0,8,16 * * *', async () => {
+const EVERY_8_HOURS = '* 0,8,16 * * *';
+const EVERY_5_SECONDS = '*/5 * * * * *';
+
+export const trackingStatusSummaryReport = cron.schedule(EVERY_5_SECONDS, async () => {
     console.log('trackingStatusSummaryReport');
     const currentDate = new Date();
     const isoDateString = currentDate.toISOString().split('.')[0] + 'Z';
