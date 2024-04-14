@@ -6,7 +6,7 @@ const app = new Koa()
 
 const port = 3000;
 
-// trackingStatusSummaryReport.start();
+trackingStatusSummaryReport.start();
 
 app.use(router.routes())
 
