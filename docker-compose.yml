@@ -1,10 +1,9 @@
-version: '3.9'
 services:
   s_web:
     build: .
     container_name: 'test-node-server'
     ports:
-      - '3000:3000'
+      - '9000:3000'
     depends_on:
       s_redis:
         condition: service_started
