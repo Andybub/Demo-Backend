@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 const EVERY_8_HOURS = '* 0,8,16 * * *';
 const EVERY_5_SECONDS = '*/5 * * * * *';
 
-export const trackingStatusSummaryReport = cron.schedule(EVERY_5_SECONDS, async () => {
+export const trackingStatusSummaryReport = cron.schedule(EVERY_8_HOURS, async () => {
     console.log('trackingStatusSummaryReport');
     const currentDate = new Date();
     const isoDateString = currentDate.toISOString().split('.')[0] + 'Z';
