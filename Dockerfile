@@ -1,5 +1,8 @@
 # Based on LTS version of Node.js
-FROM node:20.12.0
+FROM node:lts-slim
+
+# Install openssl because using slim version of node
+RUN apt update -y && apt install -y openssl
 
 # 指定container預設的工作目錄
 WORKDIR /opt/node-server
