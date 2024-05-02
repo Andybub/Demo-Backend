@@ -13,7 +13,8 @@ WORKDIR /opt/node-server
 # COPY . /opt/node-server
 COPY . .
 
-RUN echo "DATABASE_URL=mysql://root:mypassword@s_db:3306/fake_db_name" > .env
+RUN echo "DATABASE_URL=mysql://root:mypassword@s_db:3306/fake_db_name" >> .env
+RUN echo "REDIS_HOST=s_redis" >> .env
 RUN npm install
 
 COPY ./entrypoint.sh /
