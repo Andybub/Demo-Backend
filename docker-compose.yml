@@ -10,6 +10,9 @@ services:
       s_db:
         condition: service_healthy
         restart: true
+    environment:
+      - DATABASE_URL=mysql://root:mypassword@s_db:3306/fake_db_name
+      - REDIS_HOST=s_redis
   s_redis:
     image: redis
     container_name: 'test-redis'

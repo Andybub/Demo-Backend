@@ -1,7 +1,7 @@
 # Based on LTS version of Node.js
 FROM node:lts-slim
 
-# Install openssl because using slim version of node
+# Additionally install openssl because of using slim version of node
 RUN apt update -y && apt install -y openssl
 
 # 指定container預設的工作目錄
@@ -13,8 +13,6 @@ WORKDIR /opt/node-server
 # COPY . /opt/node-server
 COPY . .
 
-RUN echo "DATABASE_URL=mysql://root:mypassword@s_db:3306/fake_db_name" >> .env
-RUN echo "REDIS_HOST=s_redis" >> .env
 RUN npm install
 
 COPY ./entrypoint.sh /
