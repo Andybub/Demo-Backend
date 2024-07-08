@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-service
+  labels:
+    app: nodejs
+spec:
+  selector:
+    app: nodejs
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+    nodePort: 30002  # 這裡是 NodePort 的設定，可以根據需要調整
+  type: NodePort  # 可以根據需要使用 NodePort 或 ClusterIP

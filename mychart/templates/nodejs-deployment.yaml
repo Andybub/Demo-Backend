@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-deployment
+  labels:
+    app: nodejs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nodejs
+  template:
+    metadata:
+      labels:
+        app: nodejs
+    spec:
+      containers:
+      - name: nodejs
+        image: node:18-slim
+        args: ["app/index.js"]
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app
+      volumes:
+      - name: config-volume
+        configMap:
+          name: nodejs-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nodejs-config
+data:
+  index.js: |
+    const http = require('http');
+
+    const server = http.createServer((req, res) => {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'text/plain');
+      res.end('Hello, World!\n');
+    });
+
+    server.listen(3000, () => {
+      console.log('Server running at http://127.0.0.1:3000/');
+    });
+
